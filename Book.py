@@ -32,7 +32,7 @@ data = {
 
 def serialize_document(document):
     serialized = dict(document)
-    serialized['_id'] = str(serialized['_id'])  # Convert ObjectId to string
+    serialized['_id'] = str(serialized['_id'])
     return serialized
 
 
@@ -128,41 +128,24 @@ def getSignup():
     if existing_user:
         return jsonify("Email already exists")
     else:
-     Signup["dob"]=""
-     Signup["plans"]="Regular"
-     collection.insert_one(Signup)
+        Signup["dob"] = ""
+        Signup["plans"] = "Regular"
+        collection.insert_one(Signup)
     return jsonify("Successfully Created Account")
 
 
-
-
-
-@app.route("/Signup/<string:id>",methods=["PATCH"])
+@app.route("/Signup/<string:id>", methods=["PATCH"])
 def patchsignup(id):
-   
-    data=request.get_json()
-    print(id,data)
+
+    data = request.get_json()
+    print(id, data)
     collection = mongo.db.login
-    find=collection.update_one({"_id":ObjectId(id)},{"$set":{"username":data["username"],"dob":data["dob"],"plans":data["plans"]}})
-    find2=collection.find_one({"_id":ObjectId(id)})
+    find = collection.update_one({"_id": ObjectId(id)}, {"$set": {
+                                 "username": data["username"], "dob": data["dob"], "plans": data["plans"]}})
+    find2 = collection.find_one({"_id": ObjectId(id)})
 
-    
-    find2["_id"]=str(find2["_id"])
-    return jsonify("data patched succesfully",find2)
-   
-     
-
-
-
-
-
-
-
-
-
-
-
-
+    find2["_id"] = str(find2["_id"])
+    return jsonify("data patched succesfully", find2)
 
 
 @app.route('/movie/<name>', methods=['GET'])
@@ -196,7 +179,7 @@ def single_movie_cinema(name):
 
                 arr1.append(obj)
 
-    arr2=[]
+    arr2 = []
     if location:
         for i in arr1:
             if i["location"] == location:
@@ -237,26 +220,6 @@ def post_cinema():
 
         return jsonify("Cinema added successfully")
 
-
-
-@app.route("/getLocation/<name>",methods=["GET"])
-def getLocation(name):
- print(name)
-
- cinema = list(mongo.db.cinema.find({"location":location}))
-    
- data=[]
- for i in cinema:
-     for j in i["movies"]:
-         if j==name:
-             data.append(i)
-             break;
- for i in data:
-     i["_id"]=str(i["_id"]) 
-     i["time"]=i["time"]
- return jsonify(data)
-
-#  return jsonify(name,location)
 
 if __name__ == '__main__':
     app.run(port=3002)
