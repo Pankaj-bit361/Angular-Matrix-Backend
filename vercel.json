@@ -4,6 +4,6 @@
        { "src": "./Book.py", "use": "@vercel/node" }
     ],
     "routes": [
-       { "src": "/(.*)", "dest": "./Book.py" }
+       { "src": "/(.*)", "dest": "/" }
     ]
  }
